@@ -4,28 +4,40 @@
 <link rel="stylesheet" type="text/css" href="styles.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <body>
+
+   <h6>INFO 474 Final Project</h6>
+   <h6>By Cecilia Vu, Doreen Nguyen, Liam Brozik</h6>
    <h1>K-12 School Shootings</h1>
+   <h5>Dataset:<a href="https://www.chds.us/ssdb/dataset/">https://www.chds.us/ssdb/dataset/</a></h5>
+   <div id='intro'>
+         The dataset above is about K-12 School Shootings. Every instance of a gun that is brandished, fired, or a bullet hitting the school property for any reason was documented.
+   </div>
+   
    <div id='container' class='container-1'>
       <div id='graph'></div>
+      <div>
+         
+         
+       </div>
       <div id='sections'>
          <div>
-            <h5>Dataset:<a href="https://www.chds.us/ssdb/dataset/">https://www.chds.us/ssdb/dataset/</a></h5>
-            <span>Introduction here</span>
+            <h3>Total Shootings</h3>
+            <div id="filters">
+               <b>Weapon type: </b> <select id="weapon-type"></select>
+            </div>
+            <span>The line graph on the right displays the total shootings from 2008 - 2018 years. With this, we are able to cleary see the changes over time with the total shootings. The dataset we chose has data that dates back all the way from 1979, but we decided to just show the last 10 years.</span>
          </div>
          <div>
-            <h3>Highlight active text</h3>
-            <span>The top most text section scrolled into view is classed <span class='mono'>graph-scroll-active</span>. This makes it easy to highlight the active section with css: </span>
+            <h4>Sub title</h4>
+            <span>Some text here</span>
+         </div>
+         <div>
+            <h4>Sub title</h4>
+            <span>Some text here</span>
 
          </div>
          <div>
-            <h3>Headers and footers</h3>
-            To support headers and intro images/text, the explanatory text and graphic are wrapped with a container element:    
-
-            and passed to <span class='mono'>graphScroll</span>
-
-         </div>
-         <div>
-            <h3>Sticky graph</h3>
+            <h4>Sticky graph</h4>
             When the graph starts to scroll out of view, <span class='mono'>postiion: sticky</span> keeps the graph element stuck to the top of the page while the text scrolls by.
 
          </div>
