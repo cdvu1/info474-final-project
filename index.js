@@ -173,6 +173,42 @@ function render() {
       })
       .attr("r", 3);
 
+    svg
+      .selectAll("circle")
+      .data(ag_data)
+      .enter()
+      .append("circle")
+      .attr("r", 3)
+      .attr("cx", function(d) {
+        return x(d.Year);
+      })
+      .attr("cy", function(d) {
+        return y(d.Total_Shootings);
+      })
+      .on("mouseover", function(d) {
+        div
+          .transition()
+          .duration(200)
+          .style("opacity", 5);
+        div
+          .html(
+            "<div><b>Year</b>: " +
+              d.Year +
+              "</div><br/>" +
+              "<div><b>Total Shootings</b>: " +
+              d.Total_Shootings +
+              "</div>"
+          )
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY - 65 + "px");
+      })
+      .on("mouseout", function(d) {
+        div
+          .transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+
     // Remove old
     d3.selectAll("circle")
       .data(ag_data)
