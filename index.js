@@ -3,14 +3,11 @@ var oldWidth = 0
 function render(){
   if (oldWidth == innerWidth) return
   oldWidth = innerWidth
-
   var width = height = d3.select('#graph').node().offsetWidth
   var r = 40
-
-
   if (innerWidth <= 925){
     width = innerWidth
-    height = innerHeight*.7
+    height = innerHeight*.10
   }
 
   // return console.log(width, height)
@@ -44,7 +41,7 @@ function render(){
 
   var svg2 = d3.select('.container-2 #graph').html('')
     .append('svg')
-      .attrs({width: width, height: height})
+      .attrs({width: width + 450, height: height + 200})
 
   var path = svg2.append('path')
 
@@ -54,25 +51,32 @@ function render(){
       .eventId('uniqueId2')  // namespace for scroll and resize events
       .sections(d3.selectAll('.container-2 #sections > div'))
       .on('active', function(i){
-        var h = height
-        var w = width
-        var dArray = [
-          [[w/4, h/4], [w*3/4, h/4],  [w*3/4, h*3/4], [w/4, h*3/4]],
-          [[0, 0],     [w*3/4, h/4],  [w*3/4, h*3/4], [w/4, h*3/4]],
-          [[w/2, h/2], [w, h/4],      [w, h],         [w/4, h]],
-          [[w/2, h/2], [w, h/4],      [w, h],         [w/4, h]],
-          [[w/2, h/2], [w, h/2],      [0, 0],         [w/4, h/2]],
-          [[w/2, h/2], [0, h/4],      [0, h/2],         [w/4, 0]],
-        ].map(function(d){ return 'M' + d.join(' L ') })
-
-
-        path.transition().duration(1000)
-            .attr('d', dArray[i])
-            .style('fill', colors[i])
+        var h = height - 200
+        var w = width - 200 
+        var path = d3.geoPath();
+        
+        d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
+          if (error) throw error;
+        
+          svg2.append("g")
+            .style("width", "100%")
+            .style("height", "auto")
+            .attr("class", "states")
+            .selectAll("path")
+            .data(topojson.feature(us, us.objects.states).features)
+            .enter().append("path")
+              .attr("d", path)
+        
+          svg2.append("path")
+              .attr("class", "state-borders")
+              .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { 
+                return a !== b; 
+              })));
+        });
       })
 
-  d3.select('#source')
-      .styles({'margin-bottom': window.innerHeight - 450 + 'px', padding: '100px'})
+  // d3.select('#source')
+  //     .styles({'margin-bottom': window.innerHeight + 'px', padding: '100px'})
 }
 render()
 d3.select(window).on('resize', render)
