@@ -1,78 +1,106 @@
-
-body{
+body {
   padding: 70px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  background-color: #eee !important;
+}
+html {
+  background: #eee;
 }
 
 #intro {
   width: 600px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 }
-
-#container{
+#top {
+  background-image: url("https://www.thetrace.org/wp-content/uploads/2015/07/Wal-Mart-Rifles-background-check.jpg");
+  filter: saturate(0.6);
+  background-position-x: center;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 95vh;
+  width: 110vw;
+  padding-top: 30vh;
+  margin-left: -10vw;
+  margin-top: -70px;
+}
+#top-text {
+  width: 700px;
+  height: 300px;
+  padding: 50px;
+  background-color: rgba(238, 238, 238, 0.9);
+  padding-top: 40px;
+  border-radius: 10px;
+}
+#top-details h6 {
+  font-size: 12px;
+}
+#container {
+  background-color: #eee;
   position: relative;
+  padding: 50px;
 }
-
-#sections{
+#sections {
   width: 340px;
 }
 
-#sections > div{
-  background: white;
-  opacity: .2;
+#sections > div {
+  background: #eee;
+  opacity: 0.2;
   margin-bottom: 200px;
 }
-#sections > div:last-child{
+#sections > div:last-child {
   margin-bottom: 30px;
 }
-#sections > div.graph-scroll-active{
+#sections > div.graph-scroll-active {
   opacity: 1;
 }
 
-#graph{
+#graph {
   width: 500px;
   position: -webkit-sticky;
   position: sticky;
-  top: 0px;
+  top: 50px;
   float: right;
+  padding: 100;
 }
 
-@media (max-width: 925px)  {
-  #graph{
+@media (max-width: 925px) {
+  #graph {
     width: 100%;
     margin-left: 0px;
     float: none;
   }
 
-  #sections{
+  #sections {
     width: auto;
     position: relative;
     margin: 0px auto;
   }
 
-  #sections > div{
-    background: rgba(255,255,255,.5);
+  #sections > div {
+    background: rgba(255, 255, 255, 0.5);
     padding: 10px;
     border-top: 1px solid;
     border-bottom: 1px solid;
     margin-bottom: 80vh;
   }
 
-  pre{
+  pre {
     overflow: hidden;
   }
 
-  h1{
+  h1 {
     margin: 10px;
   }
 }
 
-
-.mono{
+.mono {
   font-family: monospace;
 }
 
-svg{
+svg {
   background-color: #eee;
 }
 
@@ -85,7 +113,6 @@ svg{
   background-color: white;
   border: red solid 1px;
 }
-
 
 .axis path,
 .axis line {
@@ -134,4 +161,3 @@ g circle:hover {
 #dropDown {
   display: inline-block;
 }
-
