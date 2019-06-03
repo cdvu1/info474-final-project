@@ -14,7 +14,6 @@ html {
 }
 #top {
   background-image: url("https://www.thetrace.org/wp-content/uploads/2015/07/Wal-Mart-Rifles-background-check.jpg");
-  filter: saturate(0.6);
   background-position-x: center;
   background-position-y: center;
   background-repeat: no-repeat;
@@ -43,6 +42,7 @@ html {
 }
 #sections {
   width: 340px;
+  padding-bottom: 150px;
 }
 
 #sections > div {
@@ -64,6 +64,7 @@ html {
   top: 50px;
   float: right;
   padding: 100;
+  margin-right: 50px !important;
 }
 
 @media (max-width: 925px) {
