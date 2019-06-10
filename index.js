@@ -173,6 +173,42 @@ function render() {
       })
       .attr("r", 3);
 
+    svg
+      .selectAll("circle")
+      .data(ag_data)
+      .enter()
+      .append("circle")
+      .attr("r", 3)
+      .attr("cx", function(d) {
+        return x(d.Year);
+      })
+      .attr("cy", function(d) {
+        return y(d.Total_Shootings);
+      })
+      .on("mouseover", function(d) {
+        div
+          .transition()
+          .duration(200)
+          .style("opacity", 5);
+        div
+          .html(
+            "<div><b>Year</b>: " +
+              d.Year +
+              "</div><br/>" +
+              "<div><b>Total Shootings</b>: " +
+              d.Total_Shootings +
+              "</div>"
+          )
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY - 65 + "px");
+      })
+      .on("mouseout", function(d) {
+        div
+          .transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+
     // Remove old
     d3.selectAll("circle")
       .data(ag_data)
@@ -276,11 +312,11 @@ function render() {
       .text("Number of Shootings");
   };
 
-  var svg = d3
-    .select("#graph")
-    .html("")
-    .append("svg")
-    .attrs({ width: width, height: height });
+  // var svg = d3
+  //   .select("#graph")
+  //   .html("")
+  //   .append("svg")
+  //   .attrs({ width: width, height: height });
   /*
   var circle = svg.append('circle')
       .attrs({cx: 0, cy: 0, r: r})
@@ -301,7 +337,7 @@ function render() {
     .sections(d3.selectAll(".container-1 #sections > div"))
     // .offset(innerWidth < 900 ? innerHeight - 30 : 200)
     .on("active", function(i) {
-      console.log(i);
+      // console.log(i);
       filterType(guns[i], global_data);
       /*
         var pos = [ {cx: width - r, cy: r},
@@ -318,58 +354,250 @@ function render() {
 
   // graph 2 starts here
 
-  var svg2 = d3.select('.container-2 #graph').html('')
-    .append('svg')
-      .attrs({width: width + 450, height: height + 200})
+  var svg2 = d3
+    .select(".container-2 #graph")
+    .html("")
+    .append("svg")
+    .attrs({ width: width, height: height });
 
-  var path = svg2.append('path')
+  var path = svg2.append("path");
 
-  var gs2 = d3.graphScroll()
-      .container(d3.select('.container-2'))
-      .graph(d3.selectAll('.container-2 #graph'))
-      .eventId('uniqueId2')  // namespace for scroll and resize events
-      .sections(d3.selectAll('.container-2 #sections > div'))
-      .on('active', function(i){
-        var h = height - 200
-        var w = width - 200 
-        var path = d3.geoPath();
-        
-        d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
-          if (error) throw error;
-        
-          svg2.append("g")
-            .style("width", "100%")
-            .style("height", "auto")
-            .attr("class", "states")
-            .selectAll("path")
-            .data(topojson.feature(us, us.objects.states).features)
-            .enter().append("path")
-              .attr("d", path)
-        
-          svg2.append("path")
-              .attr("class", "state-borders")
-              .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { 
-                return a !== b; 
-              })));
+  // USA MAP
+  function getMapData(year) {
+    //  d3
+    // .select(".container-2 #graph svg") 
+    // .remove()
+    // var svg2 = d3
+    // .select(".container-2 #graph")
+    // svg2.remove()
+    svg2
+    .selectAll("path")
+    .remove()
+    
+    var width = 960;
+    var height = 500;
+    var lowColor = "white";
+    var highColor = "red";
+
+    // D3 Projection
+    var projection = d3
+      .geoAlbersUsa()
+      .translate([width / 3, height / 2]) // translate to center of screen
+      .scale([850]); // scale things down so see entire US
+
+    // Define path generator
+    var path = d3
+      .geoPath() // path generator that will convert GeoJSON to SVG paths
+      .projection(projection); // tell path generator to use albersUsa projection
+  // Load in my states data!
+    d3.csv("yearly_data.csv", function(data) {
+      var dataArray = [];
+      for (var d = 0; d < data.length; d++) {
+        if (year === "2014") {
+          dataArray.push(data[d].year_2014)
+        } else if (year == "2015") {
+          dataArray.push(data[d].year_2015)
+        } else if (year == "2016") {
+          dataArray.push(data[d].year_2016)
+        } else if (year == "2017") {
+          dataArray.push(data[d].year_2017)
+        } else {
+          dataArray.push(data[d].year_2018)
+        }
+        // dataArray.push((data[d]));
+        // console.log((data[d]))
+      }
+      
+      var minVal = d3.min(dataArray);
+      var maxVal = d3.max(dataArray);
+      var ramp = d3
+        .scaleLinear()
+        .domain([0, 10])
+        .range([lowColor, highColor]);
+
+    // Load GeoJSON data and merge with states data
+    d3.json("us-states.json", function(json) {
+      console.log(year)
+
+      // Loop through each state data value in the .csv file
+
+      for (var i = 0; i < data.length; i++) {
+        // Grab State Name
+        var dataState = data[i].state_abbr;
+        // console.log(dataState)
+        // Grab data value
+        // console.log(data)
+        for (var d = 0; d < data.length; d++) {
+          if (year === "2014") {
+            dataValue = data[i].year_2014;
+          } else if (year == "2015") {
+            dataValue =  data[i].year_2015;
+          } else if (year == "2016") {
+            dataValue = data[i].year_2016;
+          } else if (year == "2017") {
+            dataValue =  data[i].year_2017;
+          } else {
+            dataValue =  data[i].year_2018;
+          }
+        }
+
+
+        // Find the corresponding state inside the GeoJSON
+        for (var j = 0; j < json.features.length; j++) {
+          var jsonState = json.features[j].properties.abbr;
+          if (dataState == jsonState) {
+            // Copy the data value into the JSON
+            json.features[j].properties.value = dataValue;
+            // console.log(dataValue)  
+            // Stop looking through the JSON
+            break;
+          }
+        }
+      }
+
+      // Bind the data to the SVG and create one path per GeoJSON feature
+     
+      svg2
+        .selectAll("path")
+        .data(json.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .style("stroke", "#fff")
+        .style("stroke-width", "1")
+        .style("fill", function(d) {
+          return ramp(d.properties.value);
         });
-      })
+    })
+  })
+  }
+  
 
-  // d3.select('#source')
-  //     .styles({'margin-bottom': window.innerHeight + 'px', padding: '100px'})
+  var years = [2014, 2015, 2016, 2017, 2018]
+ 
+  var gs2 = d3
+    .graphScroll()
+    .container(d3.select(".container-2"))
+    .graph(d3.selectAll(".container-2 #graph"))
+    .eventId("uniqueId2") // namespace for scroll and resize events
+    .sections(d3.selectAll(".container-2 #sections > div"))
+    .on("active", function(i) {
+        getMapData(years[i])
+        console.log(i)
+        console.log(years[i])
+      // // Load in my states data!
+      // d3.csv("yearly_data.csv", function(data) {
+      //   var dataArray = [];
+      //   for (var d = 0; d < data.length; d++) {
+      //     dataArray.push(parseFloat(data[d].year_2014));
+      //     console.log(data[d].year_2014)
+      //   }
+      //   var minVal = d3.min(dataArray);
+      //   var maxVal = d3.max(dataArray);
+      //   var ramp = d3
+      //     .scaleLinear()
+      //     .domain([0, 10])
+      //     .range([lowColor, highColor]);
+
+      //   // Load GeoJSON data and merge with states data
+      //   d3.json("us-states.json", function(json) {
+      //     // Loop through each state data value in the .csv file
+      //     for (var i = 0; i < data.length; i++) {
+      //       // Grab State Name
+      //       var dataState = data[i].state_abbr;
+      //       // console.log(dataState)
+      //       // Grab data value
+      //       var dataValue = data[i].year_2014;
+      //       // console.log(dataValue)
+
+      //       // Find the corresponding state inside the GeoJSON
+      //       for (var j = 0; j < json.features.length; j++) {
+      //         var jsonState = json.features[j].properties.abbr;
+
+      //         if (dataState == jsonState) {
+      //           // Copy the data value into the JSON
+      //           json.features[j].properties.value = dataValue;
+      //           console.log(dataValue)  
+      //           // Stop looking through the JSON
+      //           break;
+      //         }
+      //       }
+      //     }
+
+      //     // Bind the data to the SVG and create one path per GeoJSON feature
+      //     svg2
+      //       .selectAll("path")
+      //       .data(json.features)
+      //       .enter()
+      //       .append("path")
+      //       .attr("d", path)
+      //       .style("stroke", "#fff")
+      //       .style("stroke-width", "1")
+      //       .style("fill", function(d) {
+      //         return ramp(d.properties.value);
+      //       });
+
+          // add a legend
+          // var w = 140,
+          //   h = 300;
+
+          // var key = d3
+          //   .select("map-graph1")
+          //   .append("svg")
+          //   .attr("width", w)
+          //   .attr("height", h)
+          //   .attr("class", "legend");
+
+          // var legend = key
+          //   .append("defs")
+          //   .append("svg:linearGradient")
+          //   .attr("id", "gradient")
+          //   .attr("x1", "100%")
+          //   .attr("y1", "0%")
+          //   .attr("x2", "100%")
+          //   .attr("y2", "100%")
+          //   .attr("spreadMethod", "pad");
+
+          // legend
+          //   .append("stop")
+          //   .attr("offset", "0%")
+          //   .attr("stop-color", highColor)
+          //   .attr("stop-opacity", 1);
+
+          // legend
+          //   .append("stop")
+          //   .attr("offset", "100%")
+          //   .attr("stop-color", lowColor)
+          //   .attr("stop-opacity", 1);
+
+          // key
+          //   .append("rect")
+          //   .attr("width", w - 100)
+          //   .attr("height", h)
+          //   .style("fill", "url(#gradient)")
+          //   .attr("transform", "translate(0,10)");
+
+          // var y = d3
+          //   .scaleLinear()
+          //   .range([h, 0])
+          //   .domain([minVal, maxVal]);
+
+          // var yAxis = d3.axisRight(y);
+
+          // key
+          //   .append("g")
+          //   .attr("class", "y axis")
+          //   .attr("transform", "translate(41,10)")
+          //   .call(yAxis);
+      //   });
+      // });
+    });
+
+  // d3.select("#source").styles({
+  //   "margin-bottom": window.innerHeight - 450 + "px",
+  //   padding: "100px"
+  // });
 }
-// render()
-// d3.select(window).on('resize', render) 
-//       path
-//         .transition()
-//         .duration(1000)
-//         .attr("d", dArray[i])
-//         .style("fill", colors[i]);
-//     });
-
-//   d3.select("#source").styles({
-//     "margin-bottom": window.innerHeight - 450 + "px",
-//     padding: "100px"
-//   });
-// }
-// render();
+render();
 // d3.select(window).on("resize", render);
+
