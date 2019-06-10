@@ -428,16 +428,18 @@ function render() {
         // Grab data value
         // console.log(data)
         for (var d = 0; d < data.length; d++) {
-          if (year === "2014") {
-            dataValue = data[i].year_2014;
-          } else if (year == "2015") {
-            dataValue =  data[i].year_2015;
-          } else if (year == "2016") {
-            dataValue = data[i].year_2016;
+          if (year === "2018") {
+            dataValue = data[i].year_2018;
           } else if (year == "2017") {
             dataValue =  data[i].year_2017;
+          } else if (year == "2016") {
+            dataValue = data[i].year_2016;
+          } else if (year == "2015") {
+            dataValue =  data[i].year_2015;
+          } else if (year == "2014") {
+            dataValue =  data[i].year_2014;
           } else {
-            dataValue =  data[i].year_2018;
+            dataValue = null
           }
         }
 
