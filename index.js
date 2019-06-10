@@ -389,10 +389,11 @@ function render() {
         .projection(projection); // tell path generator to use albersUsa projection
 
       // Load in my states data!
-      d3.csv("statedata.csv", function(data) {
+      d3.csv("yearly_data.csv", function(data) {
         var dataArray = [];
         for (var d = 0; d < data.length; d++) {
-          dataArray.push(parseFloat(data[d].value));
+          dataArray.push(parseFloat(data[d].year_2014));
+          console.log(data[d].year_2014)
         }
         var minVal = d3.min(dataArray);
         var maxVal = d3.max(dataArray);
@@ -406,17 +407,21 @@ function render() {
           // Loop through each state data value in the .csv file
           for (var i = 0; i < data.length; i++) {
             // Grab State Name
-            var dataState = data[i].state;
+            var dataState = data[i].state_abbr;
+            // console.log(dataState)
             // Grab data value
-            var dataValue = data[i].value;
+            var dataValue = data[i].year_2014;
+            // console.log(dataValue)
 
             // Find the corresponding state inside the GeoJSON
             for (var j = 0; j < json.features.length; j++) {
-              var jsonState = json.features[j].properties.name;
+              var jsonState = json.features[j].properties.abbr;
 
               if (dataState == jsonState) {
                 // Copy the data value into the JSON
                 json.features[j].properties.value = dataValue;
+                console.log(dataValue)
+                
 
                 // Stop looking through the JSON
                 break;
@@ -438,57 +443,57 @@ function render() {
             });
 
           // add a legend
-          var w = 140,
-            h = 300;
+          // var w = 140,
+          //   h = 300;
 
-          var key = d3
-            .select(".container-2")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h)
-            .attr("class", "legend");
+          // var key = d3
+          //   .select("map-graph1")
+          //   .append("svg")
+          //   .attr("width", w)
+          //   .attr("height", h)
+          //   .attr("class", "legend");
 
-          var legend = key
-            .append("defs")
-            .append("svg:linearGradient")
-            .attr("id", "gradient")
-            .attr("x1", "100%")
-            .attr("y1", "0%")
-            .attr("x2", "100%")
-            .attr("y2", "100%")
-            .attr("spreadMethod", "pad");
+          // var legend = key
+          //   .append("defs")
+          //   .append("svg:linearGradient")
+          //   .attr("id", "gradient")
+          //   .attr("x1", "100%")
+          //   .attr("y1", "0%")
+          //   .attr("x2", "100%")
+          //   .attr("y2", "100%")
+          //   .attr("spreadMethod", "pad");
 
-          legend
-            .append("stop")
-            .attr("offset", "0%")
-            .attr("stop-color", highColor)
-            .attr("stop-opacity", 1);
+          // legend
+          //   .append("stop")
+          //   .attr("offset", "0%")
+          //   .attr("stop-color", highColor)
+          //   .attr("stop-opacity", 1);
 
-          legend
-            .append("stop")
-            .attr("offset", "100%")
-            .attr("stop-color", lowColor)
-            .attr("stop-opacity", 1);
+          // legend
+          //   .append("stop")
+          //   .attr("offset", "100%")
+          //   .attr("stop-color", lowColor)
+          //   .attr("stop-opacity", 1);
 
-          key
-            .append("rect")
-            .attr("width", w - 100)
-            .attr("height", h)
-            .style("fill", "url(#gradient)")
-            .attr("transform", "translate(0,10)");
+          // key
+          //   .append("rect")
+          //   .attr("width", w - 100)
+          //   .attr("height", h)
+          //   .style("fill", "url(#gradient)")
+          //   .attr("transform", "translate(0,10)");
 
-          var y = d3
-            .scaleLinear()
-            .range([h, 0])
-            .domain([minVal, maxVal]);
+          // var y = d3
+          //   .scaleLinear()
+          //   .range([h, 0])
+          //   .domain([minVal, maxVal]);
 
-          var yAxis = d3.axisRight(y);
+          // var yAxis = d3.axisRight(y);
 
-          key
-            .append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(41,10)")
-            .call(yAxis);
+          // key
+          //   .append("g")
+          //   .attr("class", "y axis")
+          //   .attr("transform", "translate(41,10)")
+          //   .call(yAxis);
         });
       });
     });
@@ -500,3 +505,4 @@ function render() {
 }
 render();
 // d3.select(window).on("resize", render);
+
