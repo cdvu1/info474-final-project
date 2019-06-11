@@ -526,7 +526,7 @@ function render() {
             } else if (year == "2014") {
               dataValue = data[i].year_2014;
             } else {
-              dataValue = null;
+              dataValue = dataValue = data[i].year_2018;
             }
           }
 
