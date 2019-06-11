@@ -327,6 +327,7 @@ function render() {
     "All",
     "Rifle",
     "Shotgun",
+    "Handgun",
     "Combination of Different Types of Weapons"
   ];
   var gs = d3
