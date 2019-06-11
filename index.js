@@ -1,4 +1,5 @@
 var oldWidth = 0;
+var dataArray = [];
 function render() {
   if (oldWidth == innerWidth) return;
   oldWidth = innerWidth;
@@ -363,6 +364,8 @@ function render() {
 
   var path = svg2.append("path");
 
+
+
   // USA MAP
   function getMapData(year) {
     //  d3
@@ -392,7 +395,7 @@ function render() {
       .projection(projection); // tell path generator to use albersUsa projection
   // Load in my states data!
     d3.csv("yearly_data.csv", function(data) {
-      var dataArray = [];
+      
       for (var d = 0; d < data.length; d++) {
         if (year === "2014") {
           dataArray.push(data[d].year_2014)
@@ -409,12 +412,16 @@ function render() {
         // console.log((data[d]))
       }
       
-      var minVal = d3.min(dataArray);
-      var maxVal = d3.max(dataArray);
+      
       var ramp = d3
         .scaleLinear()
         .domain([0, 10])
         .range([lowColor, highColor]);
+      
+      var minVal = d3.min(dataArray);
+      var maxVal = d3.max(dataArray);
+
+      console.log("max value", maxVal)
 
     // Load GeoJSON data and merge with states data
     d3.json("us-states.json", function(json) {
@@ -601,6 +608,64 @@ function render() {
   //   padding: "100px"
   // });
 }
+
+
+
+//add a legend
+var lowColor = "white";
+
+    var highColor = "red";
+var w = 300, h = 50;
+
+    var key = d3.select("#legend")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+    var legend = key.append("defs")
+      .append("svg:linearGradient")
+      .attr("id", "gradient")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "100%")
+      .attr("y2", "100%")
+      .attr("spreadMethod", "pad");
+
+    legend.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", lowColor)
+      .attr("stop-opacity", 1);
+
+    legend.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", highColor)
+      .attr("stop-opacity", 1);
+
+    key.append("rect")
+      .attr("width", w)
+      .attr("height", h - 30)
+      .style("fill", "url(#gradient)")
+      .attr("transform", "translate(0,10)");
+
+    var y = d3.scaleLinear()
+      .range([300, 0])
+      .domain([8, 0]);
+
+    var yAxis = d3.axisBottom()
+      .scale(y)
+      .ticks(4);
+
+    key.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,30)")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("axis title");
+
 render();
 // d3.select(window).on("resize", render);
 

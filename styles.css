@@ -183,3 +183,8 @@ g circle:hover {
 #dropDown {
   display: inline-block;
 }
+
+.legend-container {
+  padding-bottom: 30px;
+  padding-top: 30px;
+}
