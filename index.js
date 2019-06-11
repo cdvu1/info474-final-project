@@ -490,14 +490,8 @@ function render() {
         // dataArray.push((data[d]));
         // console.log((data[d]))
       }
-<<<<<<< HEAD
       
       
-=======
-
-      var minVal = d3.min(dataArray);
-      var maxVal = d3.max(dataArray);
->>>>>>> 29edf8e6bc58802cbc77ad66ef7da61d8fadf613
       var ramp = d3
         .scaleLinear()
         .domain([0, 10])
