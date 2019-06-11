@@ -515,7 +515,7 @@ function render() {
           // Grab data value
           // console.log(data)
           for (var d = 0; d < data.length; d++) {
-            if (year === "2018") {
+            if (year === 2018) {
               dataValue = data[i].year_2018;
             } else if (year == "2017") {
               dataValue = data[i].year_2017;
