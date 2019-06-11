@@ -64,7 +64,7 @@ html {
   top: 50px;
   float: right;
   padding: 100;
-  margin-right: 50px !important;
+  margin-right: 250px !important;
 }
 
 @media (max-width: 925px) {
@@ -110,7 +110,7 @@ svg {
   color: black;
 }
 
-svg{
+svg {
   background-color: #eee;
 }
 
@@ -160,6 +160,30 @@ div.tooltip {
   fill: none;
   stroke: #ff0000;
   stroke-width: 2px;
+}
+.a {
+  stroke: #ff0000;
+  color: #ff0000;
+}
+.r {
+  stroke: blue;
+  color: blue;
+}
+.ra {
+  stroke: blue;
+  color: blue;
+}
+.c {
+  stroke: green;
+  color: green;
+}
+.h {
+  stroke: yellow;
+  color: yellow;
+}
+.s {
+  stroke: orange;
+  color: orange;
 }
 g circle {
   fill: #000000;
